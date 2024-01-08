@@ -1,0 +1,26 @@
+{
+    "contacts": [
+        {
+            "id": 1,
+            "name": "Adam Smith",
+            "email": "adam1234@gmail.com",
+            "contact": "37944028402404"
+
+        },
+        {
+            "id": 2,
+            "name": "Jacob James",
+            "email": "jacob247@gmail.com",
+            "contact": "3794499832404"
+
+        },
+
+        {
+            "id": 3,
+            "name": "Adam Smith",
+            "email": "adam1234@gmail.com",
+            "contact": "37944028402404"
+
+        }
+    ]
+}
