@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useContactsQuery } from "../../Service/ContactApi";
+import {
+  useContactsQuery,
+  useDeleteContactMutation,
+} from "../../Service/ContactApi";
 import { HomeContainer } from "./Home.style";
 
 const Home = () => {
   const { data, isLoading, error } = useContactsQuery();
+  const [deleteContact] = useDeleteContactMutation();
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this contact ?")) {
+      await deleteContact(id);
+      console.log("ID", id);
+      toast.success("contact deleted successfully");
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+    }
+  }, [error]);
+
   return (
     <HomeContainer>
       <div className="top-link">
@@ -22,31 +41,34 @@ const Home = () => {
               <th className="th">Action</th>
             </tr>
           </thead>
-          <tbody>
-            {isLoading ? (
-              <h2 className="loader">Loading....</h2>
-            ) : (
-              <>
-                {data?.map((item, index) => (
-                  <tr key={item.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td className="td">{item.name}</td>
-                    <td className="td">{item.email}</td>
-                    <td className="td">{item.contact}</td>
-                    <td className="action td">
-                      <Link to={`/edit/${item.id}`} className="edit">
-                        Edit
-                      </Link>
-                      <button className="delete">Delete</button>
-                      <Link to={`/info/${item.id}`}>
-                        <button className="view">View</button>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </>
-            )}
-          </tbody>
+          {isLoading ? (
+            <div className="loader">Loading....</div>
+          ) : (
+            <tbody>
+              {data?.map((item, index) => (
+                <tr key={item.id}>
+                  <th scope="row">{index + 1}</th>
+                  <td className="td">{item.name}</td>
+                  <td className="td">{item.email}</td>
+                  <td className="td">{item.contact}</td>
+                  <td className="action td">
+                    <Link to={`/addcontact/${item.id}`} className="edit">
+                      Edit
+                    </Link>
+                    <button
+                      className="delete"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      Delete
+                    </button>
+                    <Link to={`/info/${item.id}`}>
+                      <button className="view">View</button>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </HomeContainer>
